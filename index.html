@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Juros</title>
+    <style>
+      @font-face{
+  font-family: "titulo";
+  src: url("titulo.otf") format("truetype");
+}
+        body {
+            font-family: "titulo";
+          background-color: rgb(255,255,255);
+            background-image: url("logo.png");
+          font-weight: 100;
+  background-position: center;
+  background-attachment: fixed;
+  margin: 0;
+  text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+          font-size: 25px;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 8px 9px rgba(0,0,0,0.54);
+            width: 300px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 100px;
+            border: 1px solid #ccc;
+          font-family: "titulo";
+        }
+        button {
+            background-color: #E91E63;
+            color: white;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #EA95B2;
+        }
+        .resultado {
+            margin-top: 20px;
+            font-size: 18px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Calculadora de Juros</h1>
+        <label for="principal">Valor Principal:</label>
+        <input type="number" id="principal" placeholder="Valor Inicial">
+
+        <label for="taxa">Taxa de Juros (%):</label>
+        <input type="number" id="taxa" placeholder="Taxa de Juros">
+
+        <label for="tempo">Tempo:</label>
+        <input type="number" id="tempo" placeholder="Tempo">
+        
+        <label for="unidade">Escolha a Unidade de Tempo:</label>
+        <select id="unidade">
+            <option value="anos">Anos</option>
+            <option value="meses">Meses</option>
+            <option value="dias">Dias</option>
+        </select>
+
+        <label for="tipoJuro">Escolha o Tipo de Juros:</label>
+        <select id="tipoJuro">
+            <option value="simples">Juros Simples</option>
+            <option value="compostos">Juros Compostos</option>
+        </select>
+
+        <button onclick="calcular()">Calcular</button>
+
+        <div class="resultado" id="resultado"></div>
+    </div>
+
+    <script>
+        function calcular() {
+            let principal = parseFloat(document.getElementById('principal').value);
+            let taxa = parseFloat(document.getElementById('taxa').value) / 100;
+            let tempo = parseFloat(document.getElementById('tempo').value);
+            let unidade = document.getElementById('unidade').value;
+            let tipoJuro = document.getElementById('tipoJuro').value;
+
+            // Verificar se os valores são válidos
+            if (isNaN(principal) || isNaN(taxa) || isNaN(tempo)) {
+                alert('Por favor, insira valores válidos!');
+                return;
+            }
+
+            // Converter o tempo para anos
+            if (unidade === "meses") {
+                tempo = tempo / 12;  // Converte meses para anos
+            } else if (unidade === "dias") {
+                tempo = tempo / 365;  // Converte dias para anos
+            }
+
+            let resultado = '';
+            if (tipoJuro === 'simples') {
+                // Juros Simples
+                let jurosSimples = principal * taxa * tempo;
+                let montanteSimples = principal + jurosSimples;
+                resultado = `Juros Simples: R$ ${jurosSimples.toFixed(2)}<br>Montante: R$ ${montanteSimples.toFixed(2)}`;
+            } else {
+                // Juros Compostos
+                let montanteComposto = principal * Math.pow((1 + taxa), tempo);
+                let jurosCompostos = montanteComposto - principal;
+                resultado = `Juros Compostos: R$ ${jurosCompostos.toFixed(2)}<br>Montante: R$ ${montanteComposto.toFixed(2)}`;
+            }
+
+            document.getElementById('resultado').innerHTML = resultado;
+        }
+    </script>
+
+</body>
+</html>
